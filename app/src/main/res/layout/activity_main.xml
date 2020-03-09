@@ -1,23 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.dape.newsapp.MainActivity">
 
     <TextView
-        android:id="@+id/serachLabel"
+        android:id="@+id/searchLabel"
         android:layout_width="94dp"
         android:layout_height="40dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="32dp"
         android:layout_marginTop="16dp"
         android:paddingLeft="8dp"
         android:paddingTop="8dp"
         android:paddingRight="8dp"
         android:text="@android:string/search_go"
         android:textSize="18sp" />
+
+    <ImageButton
+        android:id="@+id/advancedSearchButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/searchLabel"
+        app:srcCompat="@android:drawable/arrow_down_float" />
 
     <EditText
         android:id="@+id/searchText"
@@ -27,10 +35,11 @@
         android:layout_alignParentRight="false"
         android:layout_marginTop="16dp"
         android:layout_marginRight="16dp"
-        android:layout_toRightOf="@id/serachLabel"
+        android:layout_toRightOf="@id/searchLabel"
         android:ems="10"
         android:inputType="none|text"
         android:paddingRight="16dp"
+        android:text="trum"
         android:textSize="18sp" />
 
     <Button
@@ -41,15 +50,73 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="false"
         android:layout_marginTop="16dp"
-        android:text="@android:string/search_go"
+        android:text="GO"
 
         />
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/advancedSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/searchText">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tagLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Tags" />
+
+                <EditText
+                    android:id="@+id/tagText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.25"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:text="politics/politics" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/dateLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="ab Datum" />
+
+                <EditText
+                    android:id="@+id/dateText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.25"
+                    android:ems="10"
+                    android:inputType="date"
+                    android:text="01.01.2014" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/searchText"
+        android:layout_below="@id/advancedSearch"
         android:orientation="horizontal" />
 
     <ProgressBar

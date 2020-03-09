@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -31,11 +33,16 @@ import static android.view.View.*;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<News>> {
     private static final String LOG_TAG = MainActivity.class.getName();
-    private static String NEWS_REQUEST_URL =
-            "https://content.guardianapis.com/search?q=debate&tag=politics/politics&from-date=2014-01-01&api-key=7792f6fb-2648-4b4c-a5ac-e8ee3f49fd96&show-tags=contributor";
+    private static final String API_KEY = "7792f6fb-2648-4b4c-a5ac-e8ee3f49fd96";
+    private static String NEWS_REQUEST_URL ="";
+
     private static final int NEWS_LOADER_ID = 1;
     private NewsAdapter newsAdapter;
     private EditText searchText;
+    private ImageButton advancedSearchButton;
+    private CardView advancedSearch;
+    private EditText tagsText;
+    private EditText dateText;
     private Button searchButton;
     private ProgressBar pgb_news;
     private TextView tv_emptyData;
@@ -47,6 +54,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        advancedSearchButton = findViewById(R.id.advancedSearchButton);
+        advancedSearch = findViewById(R.id.advancedSearch);
+        tagsText = findViewById(R.id.tagText);
+        dateText = findViewById(R.id.dateText);
+        advancedSearchButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showAdvancedSearch();
+            }
+        });
         searchText = findViewById(R.id.searchText);
         searchText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -61,11 +78,19 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
             @Override
             public void afterTextChanged(Editable editable) {
-                String search= searchText.getText().toString();
+                String search= convertStringForApi(searchText.getText().toString(),false);
+                String tag= tagsText.getText().toString();
+                String date = convertStringForApi(dateText.getText().toString(),true);
+                if(date==""){
+                    date="2014-01-01";
+                }
                 NEWS_REQUEST_URL =
                         "https://content.guardianapis.com/"
                                 +"search?q=" + search
-                                +"&tag=politics/politics&from-date=2014-01-01&api-key=7792f6fb-2648-4b4c-a5ac-e8ee3f49fd96&show-tags=contributor";
+                                +"&tag=" + tag
+                                +"&from-date=" + date
+                                +"&api-key=" + API_KEY
+                                +"&show-tags=contributor";
 
             }
         });
@@ -147,5 +172,36 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         assert connMgr != null;
         networkInfo = connMgr.getActiveNetworkInfo();
         lsv_news.setAdapter(newsAdapter);
+    }
+    public void showAdvancedSearch() {
+        switch(advancedSearch.getVisibility()){
+            case GONE:
+                advancedSearch.setVisibility(VISIBLE);
+                break;
+            case VISIBLE:
+                advancedSearch.setVisibility(GONE);
+                break;
+        }
+    }
+    public String convertStringForApi(String str, boolean isDate){
+
+        String ret = "";
+        if(isDate){
+            String[] split = str.split("\\.");
+            if(split[0]!="");
+                ret = split[2]+"-"+split[1]+"-"+split[0];
+        }
+        else {
+            StringBuilder sb= new StringBuilder();
+            String[] split = str.split(",");
+            for (String s : split
+            ) {
+                if (s != "")
+                    sb.append(s).append("%20AND%20");
+
+            }
+            ret= sb.toString();
+        }
+        return ret;
     }
 }
