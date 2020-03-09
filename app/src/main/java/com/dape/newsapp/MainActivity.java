@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private EditText searchText;
     private ImageButton advancedSearchButton;
     private CardView advancedSearch;
-    private EditText tagsText;
     private EditText dateText;
     private Button searchButton;
     private ProgressBar pgb_news;
@@ -56,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         setContentView(R.layout.activity_main);
         advancedSearchButton = findViewById(R.id.advancedSearchButton);
         advancedSearch = findViewById(R.id.advancedSearch);
-        tagsText = findViewById(R.id.tagText);
         dateText = findViewById(R.id.dateText);
         advancedSearchButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -79,7 +77,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             @Override
             public void afterTextChanged(Editable editable) {
                 String search= convertStringForApi(searchText.getText().toString(),false);
-                String tag= tagsText.getText().toString();
                 String date = convertStringForApi(dateText.getText().toString(),true);
                 if(date==""){
                     date="2014-01-01";
@@ -87,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 NEWS_REQUEST_URL =
                         "https://content.guardianapis.com/"
                                 +"search?q=" + search
-                                +"&tag=" + tag
                                 +"&from-date=" + date
                                 +"&api-key=" + API_KEY
                                 +"&show-tags=contributor";
