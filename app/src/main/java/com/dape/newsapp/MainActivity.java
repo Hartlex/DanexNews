@@ -10,7 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -18,15 +21,18 @@ import com.dape.newsapp.adapter.NewsAdapter;
 import com.dape.newsapp.loader.NewsLoader;
 import com.dape.newsapp.model.News;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<News>> {
     private static final String LOG_TAG = MainActivity.class.getName();
-    private static final String NEWS_REQUEST_URL =
+    private static String NEWS_REQUEST_URL =
             "https://content.guardianapis.com/search?q=debate&tag=politics/politics&from-date=2014-01-01&api-key=7792f6fb-2648-4b4c-a5ac-e8ee3f49fd96&show-tags=contributor";
     private static final int NEWS_LOADER_ID = 1;
     private NewsAdapter newsAdapter;
+    private EditText SearchText;
     private ProgressBar pgb_news;
     private TextView tv_emptyData;
     private RecyclerView lsv_news;
@@ -37,6 +43,28 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SearchText = findViewById(R.id.searchText);
+        SearchText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String search= SearchText.getText().toString();
+                NEWS_REQUEST_URL =
+                        "https://content.guardianapis.com/"
+                                +"search?q=" + search
+                                +"&tag=politics/politics&from-date=2014-01-01&api-key=7792f6fb-2648-4b4c-a5ac-e8ee3f49fd96&show-tags=contributor";
+
+            }
+        });
         init();
     }
     @Override

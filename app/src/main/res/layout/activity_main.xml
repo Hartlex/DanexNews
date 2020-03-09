@@ -5,6 +5,32 @@
     android:layout_height="match_parent"
     tools:context="com.dape.newsapp.MainActivity">
 
+    <TextView
+        android:id="@+id/serachLabel"
+        android:layout_width="94dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:paddingLeft="8dp"
+        android:paddingTop="8dp"
+        android:text="@android:string/search_go"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/searchText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_toRightOf="@id/serachLabel"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:textSize="18sp" />
+
     <ProgressBar
         android:id="@+id/pgb_news"
         style="?android:attr/progressBarStyleLarge"
@@ -23,6 +49,8 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/lsv_news"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/searchText"
+        tools:itemCount="20" />
 
 </RelativeLayout>
