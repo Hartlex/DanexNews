@@ -15,7 +15,7 @@
         <item name="android:layout_marginRight">@dimen/layout_margin</item>
         <item name="android:layout_marginBottom">@dimen/layout_margin</item>
         <item name="android:gravity">center</item>
-        <item name="android:fontFamily">casual</item>
+        <item name="android:fontFamily">sans-serif-black</item>
     </style>
 
     <style name="StyleLayoutDate">
@@ -25,6 +25,6 @@
         <item name="android:layout_marginRight">@dimen/layout_margin</item>
         <item name="android:layout_marginBottom">@dimen/layout_margin</item>
         <item name="android:gravity">right</item>
-        <item name="android:fontFamily">casual</item>
+        <item name="android:fontFamily">sans-serif-black</item>
     </style>
 </resources>
