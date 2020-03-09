@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,13 +27,16 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.view.View.*;
+
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<News>> {
     private static final String LOG_TAG = MainActivity.class.getName();
     private static String NEWS_REQUEST_URL =
             "https://content.guardianapis.com/search?q=debate&tag=politics/politics&from-date=2014-01-01&api-key=7792f6fb-2648-4b4c-a5ac-e8ee3f49fd96&show-tags=contributor";
     private static final int NEWS_LOADER_ID = 1;
     private NewsAdapter newsAdapter;
-    private EditText SearchText;
+    private EditText searchText;
+    private Button searchButton;
     private ProgressBar pgb_news;
     private TextView tv_emptyData;
     private RecyclerView lsv_news;
@@ -43,8 +47,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SearchText = findViewById(R.id.searchText);
-        SearchText.addTextChangedListener(new TextWatcher() {
+        searchText = findViewById(R.id.searchText);
+        searchText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -57,12 +61,19 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
             @Override
             public void afterTextChanged(Editable editable) {
-                String search= SearchText.getText().toString();
+                String search= searchText.getText().toString();
                 NEWS_REQUEST_URL =
                         "https://content.guardianapis.com/"
                                 +"search?q=" + search
                                 +"&tag=politics/politics&from-date=2014-01-01&api-key=7792f6fb-2648-4b4c-a5ac-e8ee3f49fd96&show-tags=contributor";
 
+            }
+        });
+        searchButton = findViewById(R.id.searchButton);
+        searchButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchOnClick();
             }
         });
         init();
@@ -79,35 +90,46 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
     @Override
     public Loader<List<News>> onCreateLoader(int i, Bundle bundle) {
-        tv_emptyData.setVisibility(View.GONE);
-        pgb_news.setVisibility(View.VISIBLE);
-        lsv_news.setVisibility(View.GONE);
+        tv_emptyData.setVisibility(GONE);
+        pgb_news.setVisibility(VISIBLE);
+        lsv_news.setVisibility(GONE);
         return new NewsLoader(this, NEWS_REQUEST_URL);
     }
     @Override
     public void onLoadFinished(Loader<List<News>> loader, List<News> news) {
         if (networkInfo != null && networkInfo.isConnected()) {
             if (news == null || news.size() == 0){
-                pgb_news.setVisibility(View.GONE);
-                lsv_news.setVisibility(View.GONE);
-                tv_emptyData.setVisibility(View.VISIBLE);
+                pgb_news.setVisibility(GONE);
+                lsv_news.setVisibility(GONE);
+                tv_emptyData.setVisibility(VISIBLE);
                 tv_emptyData.setText(getString(R.string.no_news));
             }else{
-                tv_emptyData.setVisibility(View.GONE);
-                pgb_news.setVisibility(View.GONE);
-                lsv_news.setVisibility(View.VISIBLE);
+                tv_emptyData.setVisibility(GONE);
+                pgb_news.setVisibility(GONE);
+                lsv_news.setVisibility(VISIBLE);
                 newsAdapter.addItems(news);
             }
         }else{
-            pgb_news.setVisibility(View.GONE);
-            lsv_news.setVisibility(View.GONE);
-            tv_emptyData.setVisibility(View.VISIBLE);
+            pgb_news.setVisibility(GONE);
+            lsv_news.setVisibility(GONE);
+            tv_emptyData.setVisibility(VISIBLE);
             tv_emptyData.setText(getString(R.string.no_data));
         }
     }
     @Override
     public void onLoaderReset(Loader<List<News>> loader) {
             newsAdapter.clear();
+    }
+    public void searchOnClick(){
+        loaderManager.destroyLoader(NEWS_LOADER_ID);
+        newsAdapter = new NewsAdapter(this, new ArrayList<News>());
+        loaderManager = getLoaderManager();
+        loaderManager.initLoader(NEWS_LOADER_ID, null, this);
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+        assert connMgr != null;
+        networkInfo = connMgr.getActiveNetworkInfo();
+        lsv_news.setAdapter(newsAdapter);
     }
     public void init() {
         lsv_news = findViewById(R.id.lsv_news);
