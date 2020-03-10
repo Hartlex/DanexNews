@@ -7,7 +7,7 @@
     tools:context="com.dape.newsapp.MainActivity">
 
     <TextView
-        android:id="@+id/searchLabel"
+        android:id="@+id/serachLabel"
         android:layout_width="94dp"
         android:layout_height="40dp"
         android:layout_alignParentLeft="true"
@@ -24,7 +24,7 @@
         android:id="@+id/advancedSearchButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/searchLabel"
+        android:layout_alignBottom="@id/serachLabel"
         app:srcCompat="@android:drawable/arrow_down_float" />
 
     <EditText
@@ -35,7 +35,7 @@
         android:layout_alignParentRight="false"
         android:layout_marginTop="16dp"
         android:layout_marginRight="16dp"
-        android:layout_toRightOf="@id/searchLabel"
+        android:layout_toRightOf="@id/serachLabel"
         android:ems="10"
         android:inputType="none|text"
         android:paddingRight="16dp"
@@ -71,6 +71,29 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/tagLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Tags" />
+
+                <EditText
+                    android:id="@+id/tagText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.25"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:text="politics/politics" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
                     android:id="@+id/dateLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -83,7 +106,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.25"
                     android:ems="10"
-                    android:inputType="date"
                     android:text="01.01.2014" />
             </LinearLayout>
         </LinearLayout>
