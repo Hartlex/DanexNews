@@ -45,7 +45,7 @@ public final class NewsQueryUtils {
     private static final int TAG_RESPONSE_CODE = 200;
     private NewsQueryUtils() {
     }
-    public static JSONObject getTags (String requestUrl){
+    public static String[] getTags (String requestUrl){
         String[] result = new String[1];
         URL url = createUrl(requestUrl);
         String jsonResponse = null;
