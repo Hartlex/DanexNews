@@ -26,6 +26,7 @@ import com.dape.newsapp.adapter.NewsAdapter;
 import com.dape.newsapp.loader.NewsLoader;
 import com.dape.newsapp.model.News;
 import com.dape.newsapp.utils.NewsQueryUtils;
+import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
 import org.w3c.dom.Text;
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final String LOG_TAG = MainActivity.class.getName();
     private static final String API_KEY = "7792f6fb-2648-4b4c-a5ac-e8ee3f49fd96";
     private static String NEWS_REQUEST_URL ="";
-    private static String[] tagResult;
+    private static JsonObject tagResult;
     private static final int NEWS_LOADER_ID = 1;
     private NewsAdapter newsAdapter;
     private EditText searchText;

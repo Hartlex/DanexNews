@@ -5,6 +5,8 @@ import android.util.Log;
 
 import com.dape.newsapp.R;
 import com.dape.newsapp.model.News;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,17 +47,17 @@ public final class NewsQueryUtils {
     private static final int TAG_RESPONSE_CODE = 200;
     private NewsQueryUtils() {
     }
-    public static String[] getTags (String requestUrl){
-        String[] result = new String[1];
+    public static JsonObject getTags (String requestUrl){
         URL url = createUrl(requestUrl);
-        String jsonResponse = null;
+        JsonObject jsonResponse = null;
         try {
-            jsonResponse = makeHttpRequest(url);
+            String str = makeHttpRequest(url);
+            jsonResponse = new JsonParser().parse(str).getAsJsonObject();
         } catch (IOException e){
             Log.e(LOG_TAG, String.valueOf(R.string.log_problem_request), e);
         }
 
-        return result;
+        return jsonResponse;
     }
     public static List<News> takeNewsData (String requestUrl){
         URL url = createUrl(requestUrl);
