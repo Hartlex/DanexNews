@@ -13,17 +13,21 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.dape.newsapp.adapter.NewsAdapter;
 import com.dape.newsapp.loader.NewsLoader;
 import com.dape.newsapp.model.News;
+import com.dape.newsapp.utils.NewsQueryUtils;
 
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -35,13 +39,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final String LOG_TAG = MainActivity.class.getName();
     private static final String API_KEY = "7792f6fb-2648-4b4c-a5ac-e8ee3f49fd96";
     private static String NEWS_REQUEST_URL ="";
-
+    private static String[] tagResult;
     private static final int NEWS_LOADER_ID = 1;
     private NewsAdapter newsAdapter;
     private EditText searchText;
     private ImageButton advancedSearchButton;
     private CardView advancedSearch;
-    private EditText tagsText;
+    private Spinner tags1;
+    private Spinner tags2;
     private EditText dateText;
     private Button searchButton;
     private ProgressBar pgb_news;
@@ -56,8 +61,33 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         setContentView(R.layout.activity_main);
         advancedSearchButton = findViewById(R.id.advancedSearchButton);
         advancedSearch = findViewById(R.id.advancedSearch);
-        tagsText = findViewById(R.id.tagText);
+        tags1 = findViewById(R.id.dropdown1);
+        tags2 = findViewById(R.id.dropdown2);
         dateText = findViewById(R.id.dateText);
+        tags1.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    final String request = "https://content.guardianapis.com/tags?api-key="+API_KEY;
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try  {
+                                tagResult = NewsQueryUtils.getTags(request);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                    });
+
+                    thread.start();
+
+                }
+
+                return false;
+            }
+        });
         advancedSearchButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,7 +109,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             @Override
             public void afterTextChanged(Editable editable) {
                 String search= convertStringForApi(searchText.getText().toString(),false);
-                String tag= tagsText.getText().toString();
                 String date = convertStringForApi(dateText.getText().toString(),true);
                 if(date==""){
                     date="2014-01-01";
@@ -87,7 +116,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 NEWS_REQUEST_URL =
                         "https://content.guardianapis.com/"
                                 +"search?q=" + search
-                                +"&tag=" + tag
                                 +"&from-date=" + date
                                 +"&api-key=" + API_KEY
                                 +"&show-tags=contributor";
